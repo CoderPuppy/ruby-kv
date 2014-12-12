@@ -1,11 +1,12 @@
+require File.expand_path("../../store", __FILE__)
+
 class Store::Memory < Store
 	def initialize
 		@data = {}
 	end
 
 	def apply batch
-		@data.merge! batch
-		@data.delete_if { |k, v| v == nil }
+		@data.merge! batch.dup.delete_if { |k, v| v == nil }
 		self
 	end
 
@@ -14,6 +15,8 @@ class Store::Memory < Store
 	end
 
 	def _range from, to
-		@data.find_all { |key, val| key >= from && key <= to }.map { |key, val| [key, val] }
+		@data
+			.select { |key, val| key >= from && key <= to }
+			.map { |key, val| [key, val] }
 	end
 end

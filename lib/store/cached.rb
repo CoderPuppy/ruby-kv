@@ -2,10 +2,10 @@ class Store::Cached < Store
 	attr_reader :db
 	attr_reader :cache, :working
 
-	def initialize db
+	def initialize db, cache = Store::Memory.new
 		@db = db
-		@cache = Store::Memory.new
-		@working = {}
+		@cache = cache
+		# @working = {}
 	end
 
 	def load opts = {}
@@ -26,7 +26,7 @@ class Store::Cached < Store
 
 	def apply batch
 		@cache.apply batch
-		@working.merge! batch
+		# @working.merge! batch
 		self
 	end
 
@@ -40,13 +40,12 @@ class Store::Cached < Store
 	end
 
 	def _range from, to
-		# @data.find_all { |key, val| key >= from && key <= to }.map { |key, val| [key, val] }
+		# @data.select { |key, val| key >= from && key <= to }.map { |key, val| [key, val] }
 		@cache._range from, to
 	end
 
 	def save
-		@db.apply @working
-		@working = {}
+		@db.apply Hash[*@cache.range.flatten]
 		self
 	end
 end

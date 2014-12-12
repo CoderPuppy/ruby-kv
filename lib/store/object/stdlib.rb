@@ -1,4 +1,4 @@
-require "bigdecimal"
+# require "bigdecimal"
 require "set"
 
 module Store::ObjectStore::StdLib
@@ -12,8 +12,8 @@ module Store::ObjectStore::StdLib
 			:fixnum
 		when Float
 			:float
-		when BigDecimal
-			:bigdecimal
+		# when BigDecimal
+		# 	:bigdecimal
 		when Hash
 			:hash
 		when Set
@@ -81,20 +81,20 @@ module Store::ObjectStore::StdLib
 		end
 	end
 
-	begin # BigDecimal
-		def self.serialize_bigdecimal obj, raw, store
-			raw[""] = obj
-		end
+	# begin # BigDecimal
+	# 	def self.serialize_bigdecimal obj, raw, store
+	# 		raw[""] = obj
+	# 	end
 
-		def self.synthesize_bigdecimal raw, store
-			BigDecimal(raw[""])
-		end
-		singleton_class.send :alias_method, :unserialize_bigdecimal, :synthesize_bigdecimal
+	# 	def self.synthesize_bigdecimal raw, store
+	# 		BigDecimal(raw[""])
+	# 	end
+	# 	singleton_class.send :alias_method, :unserialize_bigdecimal, :synthesize_bigdecimal
 
-		def self.delete_bigdecimal raw, store
-			raw.delete ""
-		end
-	end
+	# 	def self.delete_bigdecimal raw, store
+	# 		raw.delete ""
+	# 	end
+	# end
 
 	begin # Hash
 		def self.serialize_hash obj, raw, store

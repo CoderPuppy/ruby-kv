@@ -4,6 +4,26 @@ class Store::ObjectStore
 	def initialize store
 		@store = store
 		@modules = {}
+		load
+		@store.load
+	end
+
+	def save; @store.save; self; end
+	def close; @store.close; self; end
+	def load *ids
+		@store.load gte: "R", lte: "R\xFF"
+		ids.each do |id|
+			id = lookup id unless id.is_a? Fixnum
+			@store.load gte: "S#{id}", lte: "S#{id}\xFF"
+		end
+		self
+	end
+	def unload *ids
+		ids.each do |id|
+			id = lookup id unless id.is_a? Fixnum
+			@store.unload gte: "S#{id}", lte: "S#{id}\xFF"
+		end
+		self
 	end
 
 	def keys
@@ -44,7 +64,8 @@ class Store::ObjectStore
 	end
 
 	def get id
-		id = lookup id unless id.is_a? Numeric
+		id = lookup id unless id.is_a? Fixnum
+		load id
 
 		typ = @store["S#{id}$type"]
 		return nil if typ == nil
@@ -55,7 +76,8 @@ class Store::ObjectStore
 	alias_method :[], :get
 
 	def get_unserialize id
-		id = lookup id unless id.is_a? Numeric
+		id = lookup id unless id.is_a? Fixnum
+		load id
 
 		typ = @store["S#{id}$type"]
 		return nil if typ == nil

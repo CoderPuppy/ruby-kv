@@ -92,7 +92,7 @@ class Store
 		end
 	end
 
-	autoload :LevelDB, File.expand_path("../store/leveldb.rb", __FILE__)
+	# autoload :LevelDB, File.expand_path("../store/leveldb.rb", __FILE__)
 end
 
 require File.expand_path("../store/memory.rb", __FILE__)
