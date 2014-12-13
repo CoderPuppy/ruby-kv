@@ -8,8 +8,9 @@ class Store::RedBlackTree < Store
 
 	def apply batch
 		batch.each do |k, v|
-			@tree.delete k
-			unless v == nil
+			if v == nil
+				@tree.delete k
+			else
 				@tree[k] = v
 			end
 		end
