@@ -93,7 +93,7 @@ class RedBlackTree
 					ret = ret.rebalance_for_left_insert
 				end
 			when 0
-				@value = value
+				ret = with_value(value)
 			when 1
 				ret = ret.with_right(@right.insert(key, value))
 				if ret.black? and ret.left.black? and ret.right.red? and !ret.right.children_color?(:black)
