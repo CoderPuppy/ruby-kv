@@ -26,7 +26,9 @@ raw_store["person:3"] = "Thallion"
 
 s2 = raw_store.dup
 s2["fizbuz"] = "HI"
-ap raw_store["fizbuz"]
+s2["person:1"] = "cpup"
+raise "BAD! Expected: nil, Got: #{raw_store["fizbuz"]}" unless raw_store["fizbuz"] == nil
+raise "BAD! Expected: CoderPuppy, Got: #{raw_store["person:1"]}" unless raw_store["person:1"] == "CoderPuppy"
 
 ap raw_store.range.select{true}
 raw_store.save
