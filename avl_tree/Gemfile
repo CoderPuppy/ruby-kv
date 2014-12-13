@@ -1,0 +1,14 @@
+source "http://rubygems.org"
+
+gem 'awesome_print'
+
+group :development do
+  gem 'rake'
+end
+
+group :test do
+  gem 'simplecov', :require => false
+  gem 'test-unit'
+end
+
+gemspec

@@ -22,7 +22,11 @@ raw_store.load
 raw_store["person:1"] = "CoderPuppy"
 raw_store["person:2"] = "Lilia"
 raw_store["person:3"] = "Thallion"
-ap raw_store["person:2"]
+# ap raw_store["person:2"]
+
+s2 = raw_store.dup
+s2["fizbuz"] = "HI"
+ap raw_store["fizbuz"]
 
 ap raw_store.range.select{true}
 raw_store.save

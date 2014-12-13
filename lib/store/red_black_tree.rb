@@ -1,5 +1,5 @@
 require File.expand_path("../../store", __FILE__)
-require "red_black_tree"
+require File.expand_path("../../red_black_tree", __FILE__)
 
 class Store::RedBlackTree < Store
 	def initialize
@@ -54,5 +54,11 @@ class Store::RedBlackTree < Store
 				end
 			end
 		end
+	end
+
+	def dup
+		new = super
+		new.instance_variable_set :@tree, @tree.dup
+		new
 	end
 end
