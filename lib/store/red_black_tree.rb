@@ -34,7 +34,7 @@ class Store::RedBlackTree < Store
 				n = n.right
 			end
 		end
-		Enumerator.new do |out|
+		Enumerator.new do |out, done|
 			loop do
 				break if stack.empty?
 				n = stack.last
@@ -54,6 +54,7 @@ class Store::RedBlackTree < Store
 					end
 				end
 			end
+			done[]
 		end
 	end
 

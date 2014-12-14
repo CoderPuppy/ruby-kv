@@ -2,15 +2,20 @@ class Store::Cached < Store
 	attr_reader :db
 	attr_reader :cache, :working
 
-	def initialize db, cache = Store::Memory.new
+	def initialize db, cache = Store::Memory.new, working = Store::Memory.new
 		@db = db
 		@cache = cache
-		# @working = {}
+		@working_blank = working
+		@working = working.dup
 	end
 
-	def load opts = {}
+	def load opts = {}, &blk
+		batch = @cache.batch
 		@db.range(opts).each do |k, v|
-			@cache[k] = v
+			batch[k] = v
+		end.onend do
+			batch.apply
+			blk.call if blk
 		end
 		self
 	end
@@ -26,6 +31,7 @@ class Store::Cached < Store
 
 	def apply batch
 		@cache.apply batch
+		@working.apply batch
 		# @working.merge! batch
 		self
 	end
@@ -33,8 +39,11 @@ class Store::Cached < Store
 	def get key
 		val = @cache[key]
 		if val == nil
-			val = @db[key]
-			@cache[key] = val
+			begin
+				val = @db[key]
+				@cache[key] = val
+			rescue
+			end
 		end
 		val
 	end
@@ -45,7 +54,12 @@ class Store::Cached < Store
 	end
 
 	def save
-		@db.apply Hash[*@cache.range.flatten]
+		@db.apply Hash[*@working.range.flat_map{|kv|kv}]
+		@working = @working_blank.dup
 		self
+	end
+
+	def dup
+		Store::Cached.new @db.dup, @cache.dup, @working_blank.dup
 	end
 end

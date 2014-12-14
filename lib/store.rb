@@ -50,7 +50,7 @@ class Store
 		_range from, to
 	end
 
-	def load range = {}; self; end
+	def load range = {}, &done; self; end
 	def unload range = {}; self; end
 	def save; self; end
 	def close; self; end
