@@ -47,6 +47,7 @@ class Store
 				to = opts[:lt][0..-2] + (opts[:lt][-1].ord - 1).chr
 			end
 		end
+		raise ArgumentError, "from > to, [#{from}] > [#{to}]" if from > to
 		_range from, to
 	end
 
