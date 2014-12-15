@@ -21,11 +21,14 @@ class Store::Cached < Store
 	end
 
 	def unload opts = {}
+		t = @working
+		@working = @working_blank.dup
 		batch = @cache.batch
 		@cache.range(opts).each do |k, v|
 			batch.del k
 		end
 		batch.apply
+		@working = t
 		self
 	end
 
